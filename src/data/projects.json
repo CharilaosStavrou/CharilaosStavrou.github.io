@@ -1,0 +1,74 @@
+[
+  {
+    "name": "world-pulse",
+    "title": "World Pulse",
+    "description": "Real-time news on an interactive 3D Earth, with voice commands, earthquakes, ISS and Moon telemetry.",
+    "url": "https://github.com/CharilaosStavrou/world-pulse",
+    "homepage": null,
+    "tags": ["3d-globe", "real-time", "voice-commands"],
+    "featured": true,
+    "language": null,
+    "updatedAt": null,
+    "image": "https://opengraph.githubassets.com/1/CharilaosStavrou/world-pulse"
+  },
+  {
+    "name": "line-simulatorv1",
+    "title": "Production Line Simulator",
+    "description": "Discrete-event simulation with breakdowns, blocking and confidence intervals validated against queueing theory.",
+    "url": "https://github.com/CharilaosStavrou/line-simulatorv1",
+    "homepage": "https://line-simulatorv1.vercel.app",
+    "tags": ["discrete-event-simulation", "queueing-theory"],
+    "featured": true,
+    "language": null,
+    "updatedAt": null,
+    "image": "https://opengraph.githubassets.com/1/CharilaosStavrou/line-simulatorv1"
+  },
+  {
+    "name": "hypersonic-flight-lab",
+    "title": "Hypersonic Flight Lab",
+    "description": "Mach 10 flight physics on a 3D Earth with atmosphere model, aerodynamic heating and material limits.",
+    "url": "https://github.com/CharilaosStavrou/hypersonic-flight-lab",
+    "homepage": null,
+    "tags": ["flight-physics", "3d-globe"],
+    "featured": false,
+    "language": null,
+    "updatedAt": null,
+    "image": "https://opengraph.githubassets.com/1/CharilaosStavrou/hypersonic-flight-lab"
+  },
+  {
+    "name": "aggregate-planning",
+    "title": "Aggregate Planning",
+    "description": "Chase, Level and Mixed strategies with a cost-optimal plan by linear programming.",
+    "url": "https://github.com/CharilaosStavrou/aggregate-planning",
+    "homepage": "https://aggregate-planning.vercel.app",
+    "tags": ["production-planning", "linear-programming"],
+    "featured": false,
+    "language": null,
+    "updatedAt": null,
+    "image": "https://opengraph.githubassets.com/1/CharilaosStavrou/aggregate-planning"
+  },
+  {
+    "name": "kanban-calculator",
+    "title": "Kanban Calculator",
+    "description": "Kanban loop sizing validated by an hourly supermarket simulation.",
+    "url": "https://github.com/CharilaosStavrou/kanban-calculator",
+    "homepage": null,
+    "tags": ["kanban", "lean", "simulation"],
+    "featured": false,
+    "language": null,
+    "updatedAt": null,
+    "image": "https://opengraph.githubassets.com/1/CharilaosStavrou/kanban-calculator"
+  },
+  {
+    "name": "vsm-tool",
+    "title": "VSM Tool",
+    "description": "Value stream mapping with takt time, lead time, PCE and bottleneck detection.",
+    "url": "https://github.com/CharilaosStavrou/vsm-tool",
+    "homepage": "https://vsm-tool-five.vercel.app",
+    "tags": ["value-stream-mapping", "lean"],
+    "featured": false,
+    "language": null,
+    "updatedAt": null,
+    "image": "https://opengraph.githubassets.com/1/CharilaosStavrou/vsm-tool"
+  }
+]
