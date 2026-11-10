@@ -1,30 +1,36 @@
+import { useEffect, useRef, useState } from 'react';
 import { content } from './content.js';
 import { useProjects } from './lib/useProjects.js';
 import { useReveal } from './lib/useReveal.js';
-import Background from './components/Background.jsx';
+import Globe from './components/Globe.jsx';
 import ProjectCard from './components/ProjectCard.jsx';
-import { ArrowIcon, GitHubIcon, LinkedInIcon, MailIcon } from './components/Icons.jsx';
+import {
+  ArrowDownIcon,
+  ArrowUpRightIcon,
+  CloseIcon,
+  GitHubIcon,
+  LinkedInIcon,
+  MenuIcon,
+} from './components/Icons.jsx';
 
 const NAV = [
-  ['about', 'About'],
   ['projects', 'Projects'],
+  ['about', 'About'],
   ['research', 'Research'],
   ['experience', 'Experience'],
   ['skills', 'Skills'],
   ['contact', 'Contact'],
 ];
 
-function Placeholder({ children }) {
-  return <div className="placeholder mono">{children}</div>;
-}
+const ext = { target: '_blank', rel: 'noopener noreferrer' };
 
 function Section({ id, index, title, children }) {
   return (
     <section id={id} className="section" aria-labelledby={`${id}-title`}>
       <header className="section-head reveal">
-        <span className="section-index mono">{String(index).padStart(2, '0')} //</span>
+        <span className="section-index mono" aria-hidden="true">{String(index).padStart(2, '0')} //</span>
         <h2 id={`${id}-title`}>{title}</h2>
-        <span className="section-line" />
+        <span className="section-line" aria-hidden="true" />
       </header>
       {children}
     </section>
@@ -32,92 +38,114 @@ function Section({ id, index, title, children }) {
 }
 
 function Nav() {
+  const [open, setOpen] = useState(false);
+  const btnRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        btnRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
+
   return (
-    <nav className="nav glass" aria-label="Main">
-      <a href="#top" className="nav-brand mono">
-        <span className="accent">&gt;</span> cs<span className="accent blink">_</span>
-      </a>
-      <ul className="nav-links">
-        {NAV.map(([id, label]) => (
-          <li key={id}><a href={`#${id}`}>{label}</a></li>
-        ))}
-      </ul>
+    <nav className={`nav ${open ? 'is-open' : ''}`} aria-label="Main">
+      <div className="nav-bar">
+        <a href="#top" className="nav-brand mono" aria-label="Charilaos Stavrou, back to top">
+          <span className="accent" aria-hidden="true">&gt;</span> cs<span className="accent blink" aria-hidden="true">_</span>
+        </a>
+        <button
+          ref={btnRef}
+          type="button"
+          className="nav-toggle icon-btn"
+          aria-expanded={open}
+          aria-controls="nav-links"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          onClick={() => setOpen((o) => !o)}
+        >
+          {open ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
+        </button>
+        <ul id="nav-links" className="nav-links">
+          {NAV.map(([id, label]) => (
+            <li key={id}>
+              <a href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   );
 }
 
 function Hero() {
-  const { name, tagline, photo, links } = content;
+  const { name, tagline, links } = content;
   return (
     <header id="top" className="hero">
       <div className="hero-text">
         <p className="eyebrow mono reveal">
-          <span className="dot" /> Production Engineering · Digital Manufacturing
+          <span className="dot" aria-hidden="true" />
+          <span>Production engineering<span className="eyebrow-extra"> · Digital manufacturing</span></span>
         </p>
         <h1 className="reveal">{name}</h1>
         <p className="hero-tagline reveal">{tagline}</p>
         <div className="hero-actions reveal">
-          <a className="btn btn--primary" href={links.github} target="_blank" rel="noopener noreferrer">
+          <a className="btn btn--primary" href={links.github} {...ext}>
             <GitHubIcon /> GitHub
           </a>
-          <a className="btn btn--ghost" href={links.linkedin} target="_blank" rel="noopener noreferrer">
+          <a className="btn btn--ghost" href={links.linkedin} {...ext}>
             <LinkedInIcon /> LinkedIn
           </a>
           <a className="btn btn--text" href="#projects">
-            See projects <ArrowIcon />
+            View projects <ArrowDownIcon size={16} />
           </a>
         </div>
       </div>
-      <div className="hero-photo reveal">
-        <div className="photo-frame">
-          {photo ? (
-            <img src={photo} alt={`Portrait of ${name}`} width="320" height="320" />
-          ) : (
-            <div className="photo-placeholder mono">
-              <span className="ph-icon" aria-hidden="true">◎</span>
-              <strong>TODO: your photo</strong>
-              <span>public/photo.jpg<br />+ set <code>photo</code> in content.js</span>
-            </div>
-          )}
-        </div>
+      <div className="hero-visual">
+        <Globe />
       </div>
     </header>
-  );
-}
-
-function About() {
-  const { paragraphs, extra } = content.about;
-  return (
-    <Section id="about" index={1} title="About">
-      <div className="card glass about reveal">
-        {paragraphs.map((p) => <p key={p}>{p}</p>)}
-        {extra ? <p>{extra}</p> : <Placeholder>TODO: optional extra paragraph · set <code>about.extra</code> in src/content.js</Placeholder>}
-        <ul className="facts mono">
-          <li><span>BSc</span> Chemical Engineering · Cyprus University of Technology</li>
-          <li><span>MSc</span> Production Engineering and Management · KTH</li>
-          <li><span>Focus</span> Digital twins · Simulation · AI in manufacturing</li>
-        </ul>
-      </div>
-    </Section>
   );
 }
 
 function Projects() {
   const projects = useProjects();
   useReveal([projects]);
-  const featured = projects.filter((p) => p.featured);
-  const rest = projects.filter((p) => !p.featured);
   return (
-    <Section id="projects" index={2} title="Projects">
+    <Section id="projects" index={1} title="Projects">
       <p className="section-lead reveal">
-        Pulled live from my GitHub. Repos tagged <code>portfolio</code> show up here automatically.
+        Pulled live from my GitHub. Click a card to open its live demo, or the repo if there is none.
       </p>
-      {featured.length > 0 && <div className="grid grid--featured">{featured.map((p) => <ProjectCard key={p.name} project={p} />)}</div>}
-      {rest.length > 0 && <div className="grid grid--projects">{rest.map((p) => <ProjectCard key={p.name} project={p} />)}</div>}
-      <div className="reveal more">
-        <a className="btn btn--text" href={`${content.links.github}?tab=repositories`} target="_blank" rel="noopener noreferrer">
-          All repositories on GitHub <GitHubIcon />
+      <div className="bento">
+        {projects.map((p) => (
+          <ProjectCard key={p.name} project={p} />
+        ))}
+      </div>
+      <div className="more reveal">
+        <a className="btn btn--text" href={`${content.links.github}?tab=repositories`} {...ext}>
+          All repositories on GitHub <ArrowUpRightIcon size={16} />
         </a>
+      </div>
+    </Section>
+  );
+}
+
+function About() {
+  return (
+    <Section id="about" index={2} title="About">
+      <div className="about">
+        <div className="card about-text reveal">
+          {content.about.paragraphs.map((p) => <p key={p}>{p}</p>)}
+        </div>
+        <dl className="card facts reveal">
+          <div><dt className="mono">BSc</dt><dd>Chemical Engineering<span>Cyprus University of Technology</span></dd></div>
+          <div><dt className="mono">MSc</dt><dd>Production Engineering and Management<span>KTH</span></dd></div>
+          <div><dt className="mono">Focus</dt><dd>Digital twins · Simulation · AI in manufacturing</dd></div>
+        </dl>
       </div>
     </Section>
   );
@@ -127,14 +155,14 @@ function Research() {
   const r = content.research;
   return (
     <Section id="research" index={3} title="Research">
-      <article className="card glass research reveal">
+      <article className="card research reveal">
         <span className="kicker mono">{r.kind}</span>
         <h3>{r.title}</h3>
         <ul className="bullets">
           {r.points.map((p) => <li key={p}>{p}</li>)}
         </ul>
-        <ul className="tags">
-          {r.tags.map((t) => <li key={t} className="tag">{t}</li>)}
+        <ul className="tags" aria-label="Keywords">
+          {r.tags.map((t) => <li key={t} className="tag mono">{t}</li>)}
         </ul>
       </article>
     </Section>
@@ -148,10 +176,10 @@ function Experience() {
         {content.experience.map((e) => (
           <li key={e.org} className="timeline-item reveal">
             <span className="timeline-dot" aria-hidden="true" />
-            <div className="card glass">
+            <div className="card">
               <h3>{e.org}</h3>
               {e.roles.map((r) => (
-                <div key={r.title + r.period} className="role">
+                <div key={(r.title || '') + r.period} className="role">
                   <div className="role-head">
                     {r.title && <span className="role-title">{r.title}</span>}
                     <span className="role-period mono">{r.period}</span>
@@ -170,9 +198,9 @@ function Experience() {
 function Skills() {
   return (
     <Section id="skills" index={5} title="Skills">
-      <div className="grid grid--skills">
+      <div className="skills">
         {content.skills.map((g) => (
-          <div key={g.group} className="card glass reveal">
+          <div key={g.group} className="card reveal">
             <h3 className="kicker mono">{g.group}</h3>
             <ul className="chips">
               {g.items.map((s) => <li key={s} className="chip">{s}</li>)}
@@ -189,24 +217,22 @@ function Contact() {
   const pretty = (u) => u.replace(/^https?:\/\/(www\.)?/, '');
   return (
     <Section id="contact" index={6} title="Contact">
-      <div className="card glass contact reveal">
-        <p className="contact-lead">The best ways to reach me:</p>
-        <ul className="contact-list">
-          <li>
-            <a href={links.github} target="_blank" rel="noopener noreferrer"><GitHubIcon /><span className="mono">{pretty(links.github)}</span></a>
-          </li>
-          <li>
-            <a href={links.linkedin} target="_blank" rel="noopener noreferrer"><LinkedInIcon /><span className="mono">{pretty(links.linkedin)}</span></a>
-          </li>
-          <li>
-            {links.email ? (
-              <a href={`mailto:${links.email}`}><MailIcon /><span className="mono">{links.email}</span></a>
-            ) : (
-              <span className="contact-ph"><MailIcon /><Placeholder>TODO: email · set <code>links.email</code> in src/content.js</Placeholder></span>
-            )}
-          </li>
-        </ul>
-      </div>
+      <ul className="contact reveal">
+        <li>
+          <a className="card contact-link" href={links.github} {...ext}>
+            <GitHubIcon size={22} />
+            <span><strong>GitHub</strong><span className="mono">{pretty(links.github)}</span></span>
+            <ArrowUpRightIcon className="contact-arrow" />
+          </a>
+        </li>
+        <li>
+          <a className="card contact-link" href={links.linkedin} {...ext}>
+            <LinkedInIcon size={22} />
+            <span><strong>LinkedIn</strong><span className="mono">{pretty(links.linkedin)}</span></span>
+            <ArrowUpRightIcon className="contact-arrow" />
+          </a>
+        </li>
+      </ul>
     </Section>
   );
 }
@@ -215,20 +241,20 @@ export default function App() {
   useReveal();
   return (
     <>
-      <a className="skip" href="#about">Skip to content</a>
-      <Background />
+      <a className="skip" href="#projects">Skip to content</a>
+      <div className="bg" aria-hidden="true" />
       <Nav />
       <main className="container">
         <Hero />
-        <About />
         <Projects />
+        <About />
         <Research />
         <Experience />
         <Skills />
         <Contact />
       </main>
       <footer className="footer mono">
-        © {new Date().getFullYear()} {content.shortName} · Built with React + Vite · Hosted on GitHub Pages
+        © {new Date().getFullYear()} {content.shortName}
       </footer>
     </>
   );

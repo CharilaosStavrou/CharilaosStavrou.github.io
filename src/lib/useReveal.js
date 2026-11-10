@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 
-/** Adds `.is-visible` to every `.reveal` element when it scrolls into view. */
+const STAGGER_MS = 60;
+
+/**
+ * Adds `.is-visible` to `.reveal` elements as they scroll into view. Elements that enter
+ * together get a 60 ms stagger via the --reveal-delay custom property.
+ */
 export function useReveal(deps = []) {
   useEffect(() => {
     const els = document.querySelectorAll('.reveal:not(.is-visible)');
@@ -11,14 +16,15 @@ export function useReveal(deps = []) {
     }
     const io = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
+        entries
+          .filter((e) => e.isIntersecting)
+          .forEach((e, i) => {
+            e.target.style.setProperty('--reveal-delay', `${Math.min(i, 8) * STAGGER_MS}ms`);
             e.target.classList.add('is-visible');
             io.unobserve(e.target);
-          }
-        }
+          });
       },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+      { rootMargin: '0px 0px -6% 0px', threshold: 0.06 },
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();

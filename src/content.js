@@ -1,6 +1,5 @@
 // ============================================================================
 //  ALL PERSONAL CONTENT LIVES HERE. Edit this file to change the site text.
-//  Anything marked  TODO  is a placeholder waiting for you.
 // ============================================================================
 
 export const content = {
@@ -9,26 +8,17 @@ export const content = {
   tagline:
     'Chemical engineer turned production engineer, building digital tools for factories and supply chains',
 
-  // TODO: add your photo. Put a square image at  public/photo.jpg  and set:
-  //   photo: '/photo.jpg',
-  // While this is null, the site shows a clearly marked placeholder.
-  photo: null,
-
   links: {
     github: 'https://github.com/CharilaosStavrou',
     linkedin: 'https://www.linkedin.com/in/charilaos-p-stavrou-648a25249',
-    // TODO: add your email address, e.g. 'name@example.com'. While null, a placeholder is shown.
-    email: null,
   },
 
   about: {
     paragraphs: [
       'I hold a BSc in Chemical Engineering from the Cyprus University of Technology and I am studying for an MSc in Production Engineering and Management at KTH Royal Institute of Technology.',
       'I am interested in digital twins, simulation and AI in manufacturing: using models and software to understand, plan and improve how factories and supply chains run.',
+      'Before KTH, I worked on the factory floor at ELVAL, monitoring a coil coating line, and in a catalysis lab at the University of Milan, studying photocatalytic hydrogen production. That mix of process engineering, lab research and real production taught me that the best improvements come from understanding the whole system, which is why I now build simulation and planning tools that connect data with decisions.',
     ],
-    // TODO: optional extra paragraph about yourself (what you are looking for, availability, etc.).
-    // Set to a string to show it, or leave null to show a placeholder note.
-    extra: null,
   },
 
   research: {

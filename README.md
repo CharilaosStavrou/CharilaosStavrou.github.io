@@ -32,13 +32,7 @@ If the GitHub API is down or rate-limited, the site quietly shows the data from 
 
 ## Edit the personal text
 
-Everything personal (name, tagline, about, research, experience, skills, links) is in **`src/content.js`**. Things still marked `TODO`:
-
-- **Photo**: put a square image at `public/photo.jpg` and set `photo: '/photo.jpg'`.
-- **Email**: set `links.email`.
-- **Extra about paragraph** (optional): set `about.extra`.
-
-Until you fill these in, the site shows a dashed placeholder box.
+Everything personal (name, tagline, about, research, experience, skills, links) is in **`src/content.js`**. Change the text there and push; the site rebuilds automatically.
 
 ## Run it locally
 
@@ -58,6 +52,7 @@ npm run build          # production build in dist/
 | Tests | `src/lib/projects.test.js` |
 | Build-time fetch → `projects.json` | `scripts/fetch-projects.mjs` |
 | Browser refresh with silent fallback | `src/lib/useProjects.js` |
+| Hero dot-matrix globe (canvas, no WebGL) | `src/components/Globe.jsx`, land data in `src/lib/landmask.js` |
 | Deploy workflow (push, every 6 h, manual) | `.github/workflows/deploy.yml` |
 
 Note: GitHub pauses scheduled workflows in repos with no activity for 60 days. If that happens, press **Run workflow** once (or push any commit) to wake it up.
